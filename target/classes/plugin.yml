@@ -1,0 +1,3 @@
+name: BasicPlugin
+main: com.gmail.codst3r.basicplugin.BasicPlugin
+version: 0.1
