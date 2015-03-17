@@ -31,6 +31,6 @@ public class GeneralListener implements Listener{
 			}
 		}
 		
-	}	//SERIOUSLY, GRAB A FUCKING BAKED POTATO AND SLAP ANOTHER ENTITY
+	}	//SERIOUSLY, GRAB A FUCKING BAKED POTATO AND SLAP ANOTHER ENTITY!!!
 	
 }
