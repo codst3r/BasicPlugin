@@ -6,7 +6,8 @@ public class BasicPlugin extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
-		getServer().getPluginManager().registerEvents(new GeneralListener(), this);
+		getServer().getPluginManager().registerEvents(new PredatorListener(), this);
+		getServer().getPluginManager().registerEvents(new BruteListener(), this);
 		getLogger().info("BasicPlugin Enabled.");
 	}
 	
