@@ -9,15 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class GeneralListener implements Listener{
 
-	/*
-	 * Basic listener/handler example
-	 * 
-	 * You have to browse the javadocs in order to find out what all the listeners are
-	 * But this is only for events that trigger others.
-	 * 
-	 * If you want something to be defaulted and not action-based, that's a different
-	 * story. I'll create a class dedicated to a permanent change to the server.
-	 */
+	
 	@EventHandler
 	public void playerHitPlayerEvent(EntityDamageByEntityEvent e){
 		//In this instance, EntityDamageByEntityEvent is the listener name
