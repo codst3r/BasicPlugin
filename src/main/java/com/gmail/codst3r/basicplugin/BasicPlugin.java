@@ -4,6 +4,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BasicPlugin extends JavaPlugin{
 	
+	//TODO Implement permissions for each class types
+	
 	@Override
 	public void onEnable(){
 		//Register event classes
