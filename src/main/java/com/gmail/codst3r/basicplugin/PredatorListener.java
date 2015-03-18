@@ -29,7 +29,7 @@ public class PredatorListener implements Listener{
 				z = e.getVelocity().getZ();
 		
 		final Player p = e.getPlayer();
-		if(x == 0 & y == 0 & z == 0){
+		if(x == 0 && y == 0 && z == 0){
 			//Implement bukkit task scheduling to add a temporary delay for desired effects.
 			BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 	        scheduler.scheduleSyncDelayedTask(this.plugin, new Runnable() {
