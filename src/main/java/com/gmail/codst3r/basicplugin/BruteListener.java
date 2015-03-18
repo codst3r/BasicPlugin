@@ -7,13 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BruteListener implements Listener{
-	
+
 	//TODO Implement event register if scheduled programming is required
 	//private final BasicPlugin plugin;
-	
+
 	//public BruteListener(BasicPlugin plugin) {
 	//	this.plugin = plugin;
-    //    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	//    plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	//}
 
 	/*
@@ -24,15 +24,19 @@ public class BruteListener implements Listener{
 	 */
 	@EventHandler
 	public void naturalDamage(EntityDamageByEntityEvent e){
+
 		if(e.getDamager() instanceof Player){
+
 			Player p = (Player) e.getDamager();
-			Material itemInHand = p.getItemInHand().getType();
-			if(itemInHand == Material.AIR){
-				e.setDamage(1.5);
+
+			if(p.hasPermission("basic.brute")){
+
+				Material itemInHand = p.getItemInHand().getType();
+				if(itemInHand == Material.AIR) e.setDamage(1.5);
 			}
 		}
 	}
-	
+
 	//TODO Add an event handler to allow brutes to deal bonus damage upon consuming an item
 
 }

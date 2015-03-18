@@ -13,6 +13,7 @@ public class BasicPlugin extends JavaPlugin{
 		//TODO implement simplified event register if scheduler programming is required
 		//new BruteListener(this);
 		getServer().getPluginManager().registerEvents(new BruteListener(), this);
+		getServer().getPluginManager().registerEvents(new VampireListener(), this);
 		
 		getLogger().info("BasicPlugin Enabled.");
 	}
