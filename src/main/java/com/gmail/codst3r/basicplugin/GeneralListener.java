@@ -1,28 +1,43 @@
 package com.gmail.codst3r.basicplugin;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class GeneralListener implements Listener{
+	private boolean bool = false;
 
-	
+
 	@EventHandler
-	public void playerHitPlayerEvent(EntityDamageByEntityEvent e){
-		//In this instance, EntityDamageByEntityEvent is the listener name
-		//playerHitPlayerEvent is simply the name I decided to give the method
-		
-		Entity damager = e.getDamager();	//get the damager
-		if(damager instanceof Player){		//if the entity is an instanceof Player
-			Player p = (Player) damager;	//cast the entity 'damager' to p
-			if(p.getItemInHand().getType() == Material.BAKED_POTATO){	//self explanatory
-				e.setDamage(20d);		//also self explanatory
+	public void movement(PlayerVelocityEvent e){
+		double x = e.getVelocity().getX();
+		double y = e.getVelocity().getY();
+		double z = e.getVelocity().getZ();
+		if(x == 0 & y == 0 & z== 0){
+			Player p = e.getPlayer();
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 210, 1));
+			if (!bool) {
+				bool = true;
 			}
+
 		}
-		
-	}	//SERIOUSLY, GRAB A FUCKING BAKED POTATO AND SLAP ANOTHER ENTITY!!!
-	
+
+	}
+	@EventHandler
+	public void stealthDamage(EntityDamageByEntityEvent e){
+		Entity p = e.getDamager();
+		if (p instanceof Player){
+			if (bool){
+				e.setDamage(12);
+				bool = false;
+				
+			}
+
+		}
+	}
 }
