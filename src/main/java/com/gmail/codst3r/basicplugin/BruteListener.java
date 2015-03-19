@@ -8,13 +8,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class BruteListener implements Listener{
 
-	//TODO Implement event register if scheduled programming is required
-	//private final BasicPlugin plugin;
+	@SuppressWarnings("unused")	//plugin is currently only implemented to register events
+	private final BasicPlugin plugin;
 
-	//public BruteListener(BasicPlugin plugin) {
-	//	this.plugin = plugin;
-	//    plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	//}
+	public BruteListener(BasicPlugin plugin) {
+		this.plugin = plugin;
+	    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
 	/*
 	 * Brutes are naturally strong and can do bonus damage when using fists.

@@ -1,5 +1,6 @@
 package com.gmail.codst3r.basicplugin;
 
+import org.bukkit.Color;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BasicPlugin extends JavaPlugin{
@@ -8,19 +9,15 @@ public class BasicPlugin extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
-		//Register event classes
 		new PredatorListener(this);
-		//TODO implement simplified event register if scheduler programming is required
-		//new BruteListener(this);
-		getServer().getPluginManager().registerEvents(new BruteListener(), this);
-		getServer().getPluginManager().registerEvents(new VampireListener(), this);
-		
-		getLogger().info("BasicPlugin Enabled.");
+		VampireListener vSetup = new VampireListener(this);	//Testing this to attempt functionality of dayNightMessage().
+		vSetup.dayNightMessage();	//Create instance of the bukkit scheduler
+		new BruteListener(this);
+		getLogger().info(Color.GREEN + "BasicPlugin successfully enabled. (I hope)");
 	}
 	
 	@Override
 	public void onDisable(){
-		getLogger().info("BasicPlugin Disabled");
+		getLogger().info(Color.RED + "BasicPlugin sucessfully disabled");
 	}
-
 }
