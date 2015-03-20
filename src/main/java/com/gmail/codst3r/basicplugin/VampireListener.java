@@ -1,6 +1,7 @@
 package com.gmail.codst3r.basicplugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,7 +37,11 @@ public class VampireListener implements Listener{
 				time = Bukkit.getServer().getWorld("world").getTime();
 				
 				if(time > dawn && time < dawn + 15){
-					//TODO get all online players and parse to an array to check players' permissions
+					Bukkit.broadcast(Color.ORANGE + "The sun is up! Your damage has been decreased.", "basic.vampire");
+				}
+				
+				if(time < dusk && time > dusk - 15){
+					Bukkit.broadcast(Color.LIME + "The sun is down! Your damage has been increased.", "basic.vampire");
 				}
 			}
 		}, 0L, 200L);//Run immediately upon execution, run every 200 ticks (10 seconds).
@@ -61,7 +66,7 @@ public class VampireListener implements Listener{
 				if(time < dusk && time > dawn){	//Day
 
 					if(itemUsed == Material.AIR) e.setDamage((e.getDamage())/0.5);
-					else if(isItemSword(itemUsed)) e.setDamage(e.getDamage()/1.33333);
+					else if(isItemSword(itemUsed)) e.setDamage(e.getDamage()/0.33333);
 
 				}else if(time >= dusk && time <= dawn){	//Night
 

@@ -38,6 +38,7 @@ public class PredatorListener implements Listener{
 				scheduler.scheduleSyncDelayedTask(this.plugin, new Runnable() {
 					@Override
 					public void run() {
+						//Potion effect: Invisibility 1 for 10 ticks
 						p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 10, 1));
 					}
 				}, 100L);
