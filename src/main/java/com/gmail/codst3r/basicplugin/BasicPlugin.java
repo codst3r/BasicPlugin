@@ -10,8 +10,7 @@ public class BasicPlugin extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		new PredatorListener(this);
-		VampireListener vSetup = new VampireListener(this);	//Testing this to attempt functionality of dayNightMessage().
-		vSetup.dayNightMessage();	//Create instance of the bukkit scheduler
+		new VampireListener(this);
 		new BruteListener(this);
 		getLogger().info(Color.GREEN + "BasicPlugin successfully enabled. (I hope)");
 	}
