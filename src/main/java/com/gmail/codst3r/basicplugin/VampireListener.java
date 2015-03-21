@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -17,16 +18,20 @@ import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
 
 public class VampireListener implements Listener{
 
+	//Class variables
 	private long time;
 	private final long dawn = 23031, dusk = 13187;
 	private boolean isDay;
 
+	//Instance of BasicPlugin for registering listerner events
 	private final BasicPlugin plugin;
 
+	//Declare DisguiseCraft variables
 	DisguiseCraftAPI dc;
 	private Disguise bat;
 	private Disguise player;
 
+	//Constructor is executed on onEnable() when loading the plugin
 	public VampireListener(BasicPlugin plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -38,6 +43,7 @@ public class VampireListener implements Listener{
 		player = new Disguise(dc.newEntityID(), "player", DisguiseType.Player);
 	}
 
+	//Message sent to all vampires at dawn and dusk
 	private void dayNightMessage(){
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncRepeatingTask(this.plugin, new Runnable() {
@@ -48,6 +54,11 @@ public class VampireListener implements Listener{
 				if(time > dawn && time < dawn + 300){
 					Bukkit.broadcast(Color.ORANGE + "The sun is up! Your damage has been decreased.", "basic.vampire");
 					isDay = true;
+					for(Player all : Bukkit.getServer().getOnlinePlayers()){
+						if(all.hasPermission("basic.vampire") && all.isFlying()){
+							all.setFlying(false);
+						}
+					}
 				}
 
 				if(time < dusk && time > dusk - 300){
@@ -72,14 +83,13 @@ public class VampireListener implements Listener{
 			if(p.hasPermission("basic.vampire")){
 
 				Material itemUsed = p.getItemInHand().getType();
-				long time = p.getWorld().getTime();
 
-				if(time < dusk && time > dawn){	//Day
+				if(isDay){
 
 					if(itemUsed == Material.AIR) e.setDamage((e.getDamage())/0.5);
 					else if(isItemSword(itemUsed)) e.setDamage(e.getDamage()/0.33333);
 
-				}else if(time >= dusk && time <= dawn){	//Night
+				}else if(!isDay){
 
 					if(itemUsed == Material.AIR) e.setDamage((e.getDamage())*1.5);
 					else if(isItemSword(itemUsed)) e.setDamage((e.getDamage())*1.33333);
@@ -88,6 +98,7 @@ public class VampireListener implements Listener{
 		}
 	}
 
+	//Give vampires 10% lifesteal upon dealing damage to an entity.
 	@EventHandler
 	public void lifeSteal(EntityDamageByEntityEvent e){
 
@@ -100,19 +111,42 @@ public class VampireListener implements Listener{
 		}
 	}
 
+	//Allows for a vampire to transform into a bat when they toggle sneak
 	@EventHandler
 	public void transform(PlayerToggleSneakEvent e){
 
 		Player p = e.getPlayer();
 		if(p.hasPermission("basic.vampire") && !isDay){
 			if(p.isFlying()){
+				p.sendMessage(Color.GREEN + "You are now a bat!");
 				p.setFlying(true);
 				dc.changePlayerDisguise(p, bat);
-			}else dc.changePlayerDisguise(p, player);
+			}else{
+				dc.changePlayerDisguise(p, player);
+			}
+		}else if(p.hasPermission("basic.vampire") && isDay){
+			if(p.isFlying()){
+				p.setFlying(false);
+			}
 		}
 
 	}
-
+	
+	//If a vampire logs in at night and they are still flying, setFlying(false)
+	@EventHandler
+	public void flightCheck(PlayerJoinEvent e){
+		Player p = e.getPlayer();
+		if(p.hasPermission("basic.vampire")){
+			if(isDay && p.isFlying()) p.setFlying(false);
+		}
+	}
+	
+	/**
+	 * Determines if a player has a sword in their hand
+	 * 
+	 * @param m	Item in the player's hand of type Material
+	 * @return	If the player has a sword in their hand, returns true. Else returns false.
+	 */
 	private boolean isItemSword(Material m){
 		if(m == Material.WOOD_SWORD ||
 				m == Material.IRON_SWORD ||

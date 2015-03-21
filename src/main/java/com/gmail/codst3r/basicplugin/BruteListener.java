@@ -10,9 +10,11 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class BruteListener implements Listener{
 
+	//Instance of BasicPlugin for registering events
 	@SuppressWarnings("unused")	//plugin is currently only implemented to register events
 	private final BasicPlugin plugin;
 
+	//Constructor used to create an isntance on onEnable() for registering events
 	public BruteListener(BasicPlugin plugin) {
 		this.plugin = plugin;
 	    plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -39,6 +41,7 @@ public class BruteListener implements Listener{
 		}
 	}
 	
+	//Reduces damage taken by all other entities
 	@EventHandler
 	public void reduceDamageTaken(EntityDamageEvent e){
 		
@@ -49,6 +52,7 @@ public class BruteListener implements Listener{
 		
 	}
 	
+	//reduces standard health regeneration of all other player classes except brutes
 	@EventHandler
 	public void reduceStandardRegen(EntityRegainHealthEvent e){
 		
