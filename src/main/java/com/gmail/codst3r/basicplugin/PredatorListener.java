@@ -11,16 +11,19 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 public class PredatorListener implements Listener{
 
+	//Instance of BasicPlugin for registering events
 	private final BasicPlugin plugin;
 
+	//Constructor used to create an isntance on onEnable() for registering events
 	public PredatorListener(BasicPlugin plugin){
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	/*
-	 * predStandingStill is used to give the predator group an ivisible effect after
-	 * standing still for 100 ticks. The potion effect of invisibility will be granted.
+	 * Used to give the predator group an ivisible effect after
+	 * standing still for 100 ticks. The potion effect of
+	 * invisibility will be granted.
 	 */
 	@EventHandler
 	public void predStandingStill(PlayerVelocityEvent e){
@@ -38,6 +41,7 @@ public class PredatorListener implements Listener{
 				scheduler.scheduleSyncDelayedTask(this.plugin, new Runnable() {
 					@Override
 					public void run() {
+						//Potion effect: Invisibility 1 for 10 ticks
 						p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 10, 1));
 					}
 				}, 100L);

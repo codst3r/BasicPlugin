@@ -5,16 +5,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 
 public class BruteListener implements Listener{
 
-	//TODO Implement event register if scheduled programming is required
-	//private final BasicPlugin plugin;
+	//Instance of BasicPlugin for registering events
+	@SuppressWarnings("unused")	//plugin is currently only implemented to register events
+	private final BasicPlugin plugin;
 
-	//public BruteListener(BasicPlugin plugin) {
-	//	this.plugin = plugin;
-	//    plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	//}
+	//Constructor used to create an isntance on onEnable() for registering events
+	public BruteListener(BasicPlugin plugin) {
+		this.plugin = plugin;
+	    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
 	/*
 	 * Brutes are naturally strong and can do bonus damage when using fists.
@@ -35,6 +39,28 @@ public class BruteListener implements Listener{
 				if(itemInHand == Material.AIR) e.setDamage(1.5);
 			}
 		}
+	}
+	
+	//Reduces damage taken by all other entities
+	@EventHandler
+	public void reduceDamageTaken(EntityDamageEvent e){
+		
+		if(e.getEntity() instanceof Player){
+			Player p = (Player) e.getEntity();
+			if(p.hasPermission("basic.brute")) e.setDamage(e.getDamage()/0.25);
+		}
+		
+	}
+	
+	//reduces standard health regeneration of all other player classes except brutes
+	@EventHandler
+	public void reduceStandardRegen(EntityRegainHealthEvent e){
+		
+		if(e.getEntity() instanceof Player){
+			Player p = (Player) e.getEntity();
+			if(!p.hasPermission("basic.brute")) e.setAmount(e.getAmount() / 0.5);
+		}
+		
 	}
 
 	//TODO Add an event handler to allow brutes to deal bonus damage upon consuming an item
