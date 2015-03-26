@@ -37,25 +37,41 @@ public class BasicPlugin extends JavaPlugin implements Listener{
 					if(!hasGroup(p)){
 						p.sendMessage("You have joined the brutes");
 						user.addPermission("basic.brute");
-					}else p.sendMessage("You are in a class already!");
+						return true;
+					}else{
+						p.sendMessage("You are in a class already!");
+						return true;
+					}
 				}
 				else if(args[0].equalsIgnoreCase("vampire")){
 					if(!hasGroup(p)){
 						p.sendMessage("You have joined the vampires");
 						user.addPermission("basic.vampire");
-					}else p.sendMessage("You are in a class already!");
+						return true;
+					}else{
+						p.sendMessage("You are in a class already!");
+						return true;
+					}
 				}
 				else if(args[0].equalsIgnoreCase("hunter")){
 					if(!hasGroup(p)){
 						p.sendMessage("You have joined the hunters");
 						user.addPermission("basic.hunter");
-					}else p.sendMessage("You are in a class already!");
+						return true;
+					}else{
+						p.sendMessage("You are in a class already!");
+						return true;
+					}
 				}
 				else if(args[0].equalsIgnoreCase("predator")){
 					if(!hasGroup(p)){
 						p.sendMessage("You have joined the predators");
 						user.addPermission("basic.predator");
-					}else p.sendMessage("You are in a class already!");
+						return true;
+					}else{
+						p.sendMessage("You are in a class already!");
+						return true;
+					}
 				}else return false;
 			}else return false;
 		}
