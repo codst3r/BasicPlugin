@@ -24,5 +24,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/main/resources/DisguiseCraft.jar"/>
+	<classpathentry kind="lib" path="src/main/resources/PermissionsEx.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -1,7 +1,7 @@
 name: BasicPlugin
 main: com.gmail.codst3r.basicplugin.BasicPlugin
 version: 0.1
-depend: [DisguiseCraft]
+depend: [DisguiseCraft, PermissionsEx]
 permissions:
     basic.brute:
         description: Assigns a player to the Brute class
@@ -12,3 +12,10 @@ permissions:
     basic.vampire:
         description: Assigns a player to the Vampire class
         default: false
+    basic.hunter:
+        description: Assigns a player to the Hunter class
+        default: false
+commands:
+    join:
+        description: Join a class
+        usage: Syntax error! Simply type /join <group name>

@@ -1,14 +1,14 @@
 package com.gmail.codst3r.basicplugin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
@@ -21,7 +21,9 @@ public class VampireListener implements Listener{
 	//Class variables
 	private long time;
 	private final long dawn = 23031, dusk = 13187;
+	private final byte thickPotionData = 32;
 	private boolean isDay;
+	private boolean msgQueue;
 
 	//Instance of BasicPlugin for registering listerner events
 	private final BasicPlugin plugin;
@@ -50,20 +52,40 @@ public class VampireListener implements Listener{
 			@Override
 			public void run() {
 				time = Bukkit.getServer().getWorld("world").getTime();
-
-				if(time > dawn && time < dawn + 300){
-					Bukkit.broadcast(Color.ORANGE + "The sun is up! Your damage has been decreased.", "basic.vampire");
+				if(time > dawn && time < (dawn + 250)){
 					isDay = true;
-					for(Player all : Bukkit.getServer().getOnlinePlayers()){
-						if(all.hasPermission("basic.vampire") && all.isFlying()){
-							all.setFlying(false);
+					msgQueue = true;
+				}
+				if(time < dusk && time > (dusk - 300)){
+					isDay = false;
+					msgQueue = true;
+				}
+				
+				if(isDay){
+					for(Player vampire : Bukkit.getServer().getOnlinePlayers()){
+						if(vampire.hasPermission("basic.vampire")){
+							if(vampire.isFlying()){
+								dc.changePlayerDisguise(vampire, player);
+								vampire.setAllowFlight(false);
+								vampire.setFlying(false);
+								vampire.sendMessage("It is day, you cannot bat, silly vampire.");
+							}
 						}
 					}
 				}
 
-				if(time < dusk && time > dusk - 300){
-					Bukkit.broadcast(Color.LIME + "The sun is down! Your damage has been increased.", "basic.vampire");
-					isDay = false;
+				if(isDay && msgQueue){
+					msgQueue = false;
+					Bukkit.broadcast("The sun is up! Your damage has been decreased.", "basic.vampire");
+					for(Player vampire : Bukkit.getServer().getOnlinePlayers()){
+						if(vampire.hasPermission("basic.vampire") && vampire.isFlying()){
+							vampire.setFlying(false);
+							dc.changePlayerDisguise(vampire, player);
+						}
+					}
+				}else if(!isDay && msgQueue){
+					msgQueue = false;
+					Bukkit.broadcast("The sun is down! Your damage has been increased.", "basic.vampire");
 				}
 			}
 		}, 0L, 200L);//Run immediately upon execution, run every 200 ticks (10 seconds).
@@ -111,36 +133,38 @@ public class VampireListener implements Listener{
 		}
 	}
 
-	//Allows for a vampire to transform into a bat when they toggle sneak
+	//Allows for a vampire to transform into a bat when they consume a thick potion
+	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void transform(PlayerToggleSneakEvent e){
-
+	public void transform(PlayerItemConsumeEvent e){
 		Player p = e.getPlayer();
+		ItemStack i = e.getItem();
 		if(p.hasPermission("basic.vampire") && !isDay){
-			if(p.isFlying()){
-				p.sendMessage(Color.GREEN + "You are now a bat!");
-				p.setFlying(true);
-				dc.changePlayerDisguise(p, bat);
-			}else{
-				dc.changePlayerDisguise(p, player);
-			}
-		}else if(p.hasPermission("basic.vampire") && isDay){
-			if(p.isFlying()){
-				p.setFlying(false);
+			if(i.getType() == Material.POTION && i.getData().getData() == thickPotionData){
+				
+				if(!p.isFlying()){
+					p.setAllowFlight(true);
+					dc.changePlayerDisguise(p, bat);
+					p.sendMessage("You are now a bat, you can now fly!");
+				}
+				
 			}
 		}
 
 	}
-	
+
 	//If a vampire logs in at night and they are still flying, setFlying(false)
 	@EventHandler
 	public void flightCheck(PlayerJoinEvent e){
 		Player p = e.getPlayer();
 		if(p.hasPermission("basic.vampire")){
-			if(isDay && p.isFlying()) p.setFlying(false);
+			if(isDay && p.isFlying()){
+				p.setAllowFlight(false);
+				p.setFlying(false);
+			}
 		}
 	}
-	
+
 	/**
 	 * Determines if a player has a sword in their hand
 	 * 
